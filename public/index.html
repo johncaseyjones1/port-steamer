@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,12 @@
   <title>Port Steamer — Steam × PortMaster Matcher</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="index.css">
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
+
 <body>
   <div class="app">
     <!-- Header -->
@@ -19,13 +22,13 @@
         <div class="logo">
           <div class="logo-icon">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-              <rect x="2" y="6" width="28" height="20" rx="3" stroke="currentColor" stroke-width="2"/>
-              <circle cx="10" cy="18" r="3" stroke="currentColor" stroke-width="1.5"/>
-              <circle cx="22" cy="14" r="1.5" fill="currentColor"/>
-              <circle cx="26" cy="14" r="1.5" fill="currentColor"/>
-              <circle cx="24" cy="12" r="1.5" fill="currentColor"/>
-              <circle cx="24" cy="16" r="1.5" fill="currentColor"/>
-              <rect x="14" y="15" width="4" height="2" rx="1" fill="currentColor"/>
+              <rect x="2" y="6" width="28" height="20" rx="3" stroke="currentColor" stroke-width="2" />
+              <circle cx="10" cy="18" r="3" stroke="currentColor" stroke-width="1.5" />
+              <circle cx="22" cy="14" r="1.5" fill="currentColor" />
+              <circle cx="26" cy="14" r="1.5" fill="currentColor" />
+              <circle cx="24" cy="12" r="1.5" fill="currentColor" />
+              <circle cx="24" cy="16" r="1.5" fill="currentColor" />
+              <rect x="14" y="15" width="4" height="2" rx="1" fill="currentColor" />
             </svg>
           </div>
           <div class="logo-text">
@@ -62,13 +65,15 @@
           <div class="form-group" id="api-key-group" style="display:none;">
             <label for="api-key">Steam Web API Key</label>
             <input type="password" id="api-key" placeholder="Your Steam API key">
-            <span class="form-hint">Get one free at <a href="https://steamcommunity.com/dev/apikey" target="_blank" rel="noopener">steamcommunity.com/dev/apikey</a></span>
+            <span class="form-hint">Get one free at <a href="https://steamcommunity.com/dev/apikey" target="_blank"
+                rel="noopener">steamcommunity.com/dev/apikey</a></span>
           </div>
 
           <div class="form-group">
             <label for="steam-id">Steam ID or Vanity URL</label>
             <input type="text" id="steam-id" placeholder="76561198012345678 or your_username" required>
-            <span class="form-hint">Your 64-bit Steam ID or custom URL name. Profile must be <strong>public</strong>.</span>
+            <span class="form-hint">Your 64-bit Steam ID or custom URL name. Profile must be
+              <strong>public</strong>.</span>
           </div>
 
           <div class="form-group">
@@ -100,7 +105,8 @@
         <div class="info-card">
           <div class="info-icon">🎮</div>
           <h3>PortMaster</h3>
-          <p>An open-source tool that brings 1000+ PC games to ARM-based Linux handhelds like the RG353 and TrimUI.</p>
+          <p>An open-source tool that brings 1000+ PC games to ARM-based Linux handhelds like the Anbernic RG35XX,
+            TrimUI Brick, and more.</p>
         </div>
       </div>
     </section>
@@ -128,8 +134,10 @@
       <div class="results-toolbar">
         <div class="toolbar-left">
           <div class="search-box">
-            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
             </svg>
             <input type="text" id="search-input" placeholder="Search matched games...">
           </div>
@@ -144,9 +152,9 @@
           <div class="export-dropdown">
             <button class="btn-secondary" id="btn-export">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
               Export
             </button>
@@ -157,8 +165,8 @@
           </div>
           <button class="btn-secondary" id="btn-rescan">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="23 4 23 10 17 10"/>
-              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              <polyline points="23 4 23 10 17 10" />
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
             </svg>
             Rescan
           </button>
@@ -187,4 +195,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>
