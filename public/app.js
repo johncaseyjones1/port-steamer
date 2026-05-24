@@ -9,11 +9,15 @@
   let matchedGames = [];
   let activeFilter = 'all';
 
+  let serverHasApiKey = false;
+
   // --- DOM refs ---
   const setupSection = document.getElementById('setup-section');
   const loadingSection = document.getElementById('loading-section');
   const resultsSection = document.getElementById('results-section');
   const setupForm = document.getElementById('setup-form');
+  const apiKeyGroup = document.getElementById('api-key-group');
+  const apiKeyInput = document.getElementById('api-key');
   const btnScan = document.getElementById('btn-scan');
   const errorMessage = document.getElementById('error-message');
   const headerStats = document.getElementById('header-stats');
@@ -29,7 +33,23 @@
   const deviceFilter = document.getElementById('device-filter');
 
   // --- Init ---
+  checkConfig();
   loadDevices();
+
+  // --- Check server config ---
+  async function checkConfig() {
+    try {
+      const res = await fetch('/api/config');
+      const data = await res.json();
+      serverHasApiKey = data.hasApiKey;
+      if (!serverHasApiKey) {
+        apiKeyGroup.style.display = '';
+        apiKeyInput.required = true;
+      }
+    } catch (e) {
+      console.warn('Could not load config:', e);
+    }
+  }
 
   // --- Load device list ---
   async function loadDevices() {
@@ -99,7 +119,8 @@
     const apiKey = document.getElementById('api-key').value.trim();
     const steamId = document.getElementById('steam-id').value.trim();
 
-    if (!apiKey || !steamId) return;
+    if (!serverHasApiKey && !apiKey) return;
+    if (!steamId) return;
 
     showError('');
     showSection('loading');
@@ -498,7 +519,7 @@
 <p class="subtitle">${matches.length} of your Steam games are available on PortMaster — Generated ${new Date().toLocaleDateString()}</p>
 <table>
   <thead>
-    <tr><th>Steam Game</th><th>PortMaster Port</th><th>Match</th><th>Genres</th><th>RTR</th><th>Playtime</th></tr>
+    <tr><th>Steam Game</th><th>PortMaster Port</th><th>Match</th><th>Genres</th><th>Ready to Run</th><th>Playtime</th></tr>
   </thead>
   <tbody>${gameRows}</tbody>
 </table>

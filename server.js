@@ -1,8 +1,33 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// --- Load .env file manually (no dotenv dependency) ---
+function loadEnv() {
+  const envPath = path.join(__dirname, '.env');
+  if (fs.existsSync(envPath)) {
+    const lines = fs.readFileSync(envPath, 'utf-8').split('\n');
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed && !trimmed.startsWith('#')) {
+        const eqIndex = trimmed.indexOf('=');
+        if (eqIndex > 0) {
+          const key = trimmed.slice(0, eqIndex).trim();
+          const val = trimmed.slice(eqIndex + 1).trim();
+          if (!process.env[key]) {
+            process.env[key] = val;
+          }
+        }
+      }
+    }
+  }
+}
+loadEnv();
+
+const STEAM_API_KEY = process.env.STEAM_API_KEY || '';
 
 // --- PortMaster Cache ---
 let portmasterCache = null;
@@ -34,12 +59,28 @@ async function fetchPortmasterPorts() {
 // --- Static files ---
 app.use(express.static(path.join(__dirname, 'public')));
 
+// --- API: Check if server has an API key configured ---
+app.get('/api/config', (req, res) => {
+  res.json({
+    hasApiKey: !!STEAM_API_KEY,
+  });
+});
+
 // --- API: Get Steam Library ---
 app.get('/api/steam-library', async (req, res) => {
-  const { key, steamid } = req.query;
+  const { steamid } = req.query;
 
-  if (!key || !steamid) {
-    return res.status(400).json({ error: 'Missing required parameters: key, steamid' });
+  // Use server-side key, fall back to client-provided key for backwards compat
+  const apiKey = STEAM_API_KEY || req.query.key;
+
+  if (!apiKey) {
+    return res.status(400).json({
+      error: 'No Steam API key configured. Set STEAM_API_KEY in your .env file.'
+    });
+  }
+
+  if (!steamid) {
+    return res.status(400).json({ error: 'Missing required parameter: steamid' });
   }
 
   try {
@@ -47,17 +88,17 @@ app.get('/api/steam-library', async (req, res) => {
     let resolvedSteamId = steamid;
     if (!/^\d+$/.test(steamid)) {
       const vanityRes = await fetch(
-        `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${encodeURIComponent(key)}&vanityurl=${encodeURIComponent(steamid)}`
+        `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${encodeURIComponent(apiKey)}&vanityurl=${encodeURIComponent(steamid)}`
       );
       const vanityData = await vanityRes.json();
       if (vanityData.response?.success === 1) {
         resolvedSteamId = vanityData.response.steamid;
       } else {
-        return res.status(400).json({ error: 'Could not resolve Steam vanity URL. Try using your 64-bit Steam ID instead.' });
+        return res.status(400).json({ error: 'Could not resolve Steam profile URL. Try using your 64-bit Steam ID instead.' });
       }
     }
 
-    const url = `https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${encodeURIComponent(key)}&steamid=${resolvedSteamId}&include_appinfo=true&include_played_free_games=true&format=json`;
+    const url = `https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${encodeURIComponent(apiKey)}&steamid=${resolvedSteamId}&include_appinfo=true&include_played_free_games=true&format=json`;
     const steamRes = await fetch(url);
     const steamData = await steamRes.json();
 
@@ -155,5 +196,11 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`\n🎮 Port Steamer running at http://localhost:${PORT}\n`);
+  console.log(`\n🎮 Port Steamer running at http://localhost:${PORT}`);
+  if (STEAM_API_KEY) {
+    console.log('✅ Steam API key loaded from .env');
+  } else {
+    console.log('⚠️  No STEAM_API_KEY in .env — users will need to provide their own key');
+  }
+  console.log('');
 });
