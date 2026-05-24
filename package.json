@@ -1,0 +1,15 @@
+{
+  "name": "port-steamer",
+  "version": "1.0.0",
+  "description": "Cross-reference your Steam library with PortMaster's game catalog to find which PC games you can play on ARM Linux handhelds",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["steam", "portmaster", "handheld", "gaming", "linux"],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
