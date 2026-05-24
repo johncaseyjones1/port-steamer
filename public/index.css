@@ -984,3 +984,33 @@ a:hover {
     flex-wrap: wrap;
   }
 }
+
+/* ===== FOOTER ===== */
+.app-footer {
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.kofi-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  background: var(--bg-card);
+  padding: 0.35rem 0.75rem;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.kofi-link:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
